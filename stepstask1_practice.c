@@ -12,7 +12,6 @@ typedef struct {
 // Define any additional variables here
 
 // This is your helper function. Do not change it in any way.
-
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
 void tokeniseRecord(const char *input, const char *delimiter,
@@ -41,25 +40,47 @@ void tokeniseRecord(const char *input, const char *delimiter,
 }
 
 // Complete the main function
-int main() {
-    int buffer_size = 10000;
-    char line_buffer[buffer_size];
-    int linestoprint=3;
-    int linesprinted=0;
-    //Used the example shown in class for following code:
-    char filename [] = "FitnessData_2023.csv";
-    FILE *file = fopen("FitnessData_2023.csv", "r");
-    if (file == NULL) {
-        perror("");
+int main(){
+     FITNESS_DATA fitness[100];
+    int buffer_size = 250;
+    char linebuffer[buffer_size];
+    int recordcounter=0;
+    int linestoprint = 3;
+    int linesprinted = 0;
+
+    FILE *input = fopen("FitnessData_2023.csv", "r");
+    if (input == NULL){
         return 1;
     }
-    //printed first three lines from .csv file
-    while (fgets(line_buffer, sizeof(line_buffer), file) != NULL && linesprinted < linestoprint){
-        printf("%s", line_buffer);
-        linesprinted++;
+    //printing the number of lines in the data file using a while loop
+    while (fgets(linebuffer, sizeof(linebuffer), input) != NULL){
+    recordcounter++;
+    }
+    printf("Number of records in file: %d\n", recordcounter);
+    fclose(input); 
+
+    char date[1], time[6], steps[4];
+    tokeniseRecord(linebuffer,",",date,time,steps);
+
+    input = fopen("FitnessData_2023.csv", "r");
+    while (fgets(linebuffer, buffer_size, input))
+    {
+        if (recordcounter < 100){
+            strcpy(fitness[recordcounter].date,date);
+            strcpy(fitness[recordcounter].time,time);
+            fitness[recordcounter].steps = atoi(steps);
+        }
+        recordcounter++;
+
+        
+        input = fopen("FitnessData_2023.csv", "r");
+        while (fgets(linebuffer, sizeof(linebuffer), input) != NULL && linesprinted < linestoprint){
+            printf("%s", linebuffer);
+            linesprinted++;
+    }
+     fclose(input);
     }
 
-    fclose(file);
     return 0;
-    
 }
+   

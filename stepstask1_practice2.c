@@ -48,18 +48,17 @@ int main(){
     int recordcounter=0;
     int linestoprint = 3;
     int linesprinted = 0;
-//Used the slides given in lesson on reading from file to write the following code
+//Used the slides on reading from file to wrte the following code
     FILE *input = fopen("FitnessData_2023.csv", "r");
     if (input == NULL){
         return 1;
     }
-//first while loop, to output the number of records in the csv file
     while (fgets(linebuffer, sizeof(linebuffer), input) != NULL){
     recordcounter++;
     }
     printf("Number of records in file: %d\n", recordcounter);
     fclose(input); 
-//had to close the file and open again for the second while loop as otherwise, only the first while loop was executed.
+    
     
     input = fopen("FitnessData_2023.csv", "r");
     while (fgets(linebuffer, sizeof(linebuffer), input) && counter < linestoprint){
@@ -67,12 +66,13 @@ int main(){
         char time[7];
         char steps[4];
 
-//Had to search for following line of code as output was not printing in required format otherwise
+
+        //Had to search online for following line of code as output was not printing in required format 
         linebuffer[strcspn(linebuffer,"\r\n")] = '\0';
 
-//Printing the first three lines of the csv file in the required format
         tokeniseRecord(linebuffer,",",date, time, steps);
         printf("%s/""%s/""%s\n", date, time, steps);
+    
             strcpy(fitness[counter].date, date);
             strcpy(fitness[counter].time, time);
             fitness[counter].steps = atoi(steps);
@@ -82,3 +82,6 @@ int main(){
      fclose(input);
      return 0;
     }
+
+    
+   
